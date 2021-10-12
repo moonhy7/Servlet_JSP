@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>get 요청</title>
+</head>
+<body>
+	<h3>get 요청  1 : 웹 브라우저의 주소창에 주소를 입력 후 실행 시</h3>
+	<h3>get 요청 2 : 링크를 클릭할 때</h3>
+	<p>
+		<a href="http://www.google.com">구글</a><br>
+		<a href="http://www.naver.com">네이버</a>
+	</p>
+	<h3>get 요청 3 : 입력 폼의 method 속성을 get으로 지정할 때</h3>
+	<form action="CalculatorServlet" method="get">
+		<input type="text" name="v1" size="4">
+		<select name="op">
+			<option value="+">+</option>
+			<option value="-">-</option>
+			<option value="*">*</option>
+			<option value="/">/</option>
+		</select>
+		<input type="text" name="v2" size="4">
+		<input type="submit" value="=">
+	</form>
+</body>
+</html>
