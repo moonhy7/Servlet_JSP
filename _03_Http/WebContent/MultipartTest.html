@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>파일 업로드</title>
+</head>
+<body>
+    <h3>파일 업로드 POST 요청 : Multipart 인코딩</h3>
+    <p>입력폼의 method를 POST로 지정하고,
+        enctype 속성의 값을 multipart/form-data로 설정
+    </p>
+    <form action="FileUploadServlet" method="post"
+        enctype="multipart/form-data"> <!-- 타입 중요 -->
+        사진: <input type="file" name="photo"><br>
+        설명: <textarea name="description" cols="50" rows="3"></textarea><br>
+        <input type="submit" value="추가"><br>
+    </form>
+</body>
+</html>

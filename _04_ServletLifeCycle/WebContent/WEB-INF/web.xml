@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <display-name>_04_ServletLifeCycle</display-name>
+  <!-- 서블릿 선언(객체로 만들어서 컨테이너에 주입한다) -->
+  <!-- WAS가 구동되면서 서블릿 컨테이너를 생성하고 web.xml파일을 읽어서
+  		servlet객체를 자동 생성 -->
+  <servlet>
+  	<servlet-name>Hello</servlet-name>
+  	<servlet-class>lesson03.servlets.HelloWorld</servlet-class> <!-- was가 구동되면서 서블릿 컨테이너가 생성, 서블릿이 자동으로 구동되게 해주는 역할-->
+  </servlet>
+  
+  <!-- 서블릿을 url과 연결 -->
+  <servlet-mapping>
+  	<servlet-name>Hello</servlet-name>
+  	<url-pattern>/Hello</url-pattern> <!-- 어떤 URL로 접근할건지 설정 -->
+  </servlet-mapping>
+  
+  <!--컨텍스트 루트경로로 접속했을 때 보여지는 페이지 -->
+  <!-- http://localhost:9999/ -->
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>

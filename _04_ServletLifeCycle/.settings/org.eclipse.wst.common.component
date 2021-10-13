@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="_04_ServletLifeCycle">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <property name="context-root" value="_04_ServletLifeCycle"/>
+        <property name="java-output-path" value="/_04_ServletLifeCycle/build/classes"/>
+    </wb-module>
+</project-modules>
