@@ -9,6 +9,7 @@
 <title>회원 목록</title>
 </head>
 <body>
+	<!-- 태그핸들러에 의해 처리 : jspcontext 데이터 보관소에 올라간다. -->
 	<!-- jsp 인클루딩 : jsp:include/> -->
 	<!-- jsp 포워딩 : jsp:forward/> -->
 	<jsp:include page="/Header.jsp"/>
