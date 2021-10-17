@@ -1,9 +1,7 @@
 package spms.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -58,16 +56,17 @@ public class MemberAddServlet extends HttpServlet {
 			MemberDAO memberDAO = new MemberDAO();
 			memberDAO.setConnection(conn);
 			
+			//input폼에서 받은 파라미터들을 Member객체에 담음
 			int result = memberDAO.insert(new Member()
-									.setEmail(request.getParameter("email"))
-									.setPassword(request.getParameter("password"))
-									.setName(request.getParameter("name")));
+										 			  .setEmail(request.getParameter("email"))
+										 			  .setPassword(request.getParameter("password"))
+										 			  .setName(request.getParameter("name")));
 			
 			//sendRedirect 밑의 결과 값 출력 안하고 바로 /member/list로 이동
 			//쿼리가 성공했을 경우 list페이지로
 			if(result == 1) {
 				response.sendRedirect("list");
-			} //실패했을 경우 Error페이지로
+			}//실패했을 경우 Error페이지로
 			else {
 				RequestDispatcher rd = request.getRequestDispatcher("Error.jsp");
 				rd.forward(request, response);

@@ -2,8 +2,6 @@ package spms.servlets;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -14,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import spms.dao.MemberDAO;
 import spms.vo.Member;
 
 /**
@@ -32,52 +31,37 @@ public class LoginServlet extends HttpServlet {
 		rd.forward(request, response);
 	}
 
-	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//post 방식으로 요청이 오면 로그인 처리
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
 		
 		String sqlLogin = "SELECT MNAME, EMAIL FROM MEMBERS WHERE EMAIL=? AND PWD=?";
 		
 		try {
 			ServletContext sc = this.getServletContext();
-			conn = (Connection)sc.getAttribute("conn");
-			stmt = conn.prepareStatement(sqlLogin);
-			stmt.setString(1, request.getParameter("email"));
-			stmt.setString(2, request.getParameter("password"));
-			rs = stmt.executeQuery();
+			Connection conn = (Connection)sc.getAttribute("conn");
 			
+			MemberDAO memberDAO = new MemberDAO();
+			memberDAO.setConnection(conn);
+			
+			Member member = memberDAO.exist(request.getParameter("email"), request.getParameter("password"));
+						
 			//로그인 성공 시
-			if(rs.next()) {
-				Member member = new Member()
-										  .setEmail(rs.getString("EMAIL"))
-										  .setName(rs.getNString("MNAME"));
+			if(member != null) {
 				HttpSession session = request.getSession();
 				session.setAttribute("Member", member);
-				
 				response.sendRedirect("../member/list");
-			} //로그인 실패시
+			} //로그인 실패 시(member객체가 null일 떄)
 			else {
 				RequestDispatcher rd = request.getRequestDispatcher("/auth/LoginFail.jsp");
 				rd.forward(request, response);
 			}
 		} catch(Exception e) {
 			throw new ServletException(e);
-		} finally {
-			try {
-				if(rs != null) {
-					rs.close();
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
+
 }

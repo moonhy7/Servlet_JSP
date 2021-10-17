@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import spms.dao.MemberDAO;
 import spms.vo.Member;
 
 /**
@@ -28,73 +29,25 @@ public class MemberUpdateServlet extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		Connection conn = null;
-		Statement stmt = null;
-		ResultSet rs = null;
-		String no = request.getParameter("no");
-		String sqlSelect = "SELECT * FROM MEMBERS WHERE MNO = " + no;
-		
+		// TODO Auto-generated method stub		
 
 		//서블릿 컨텍스트 객체 생성
 		ServletContext sc = this.getServletContext();
 		
-		//컨텍스트 초기화 매개변수 꺼내 쓰기 -> sc.getIninParameter메소드로 접근
-//		String driver = sc.getInitParameter("driver");
-//		String url = sc.getInitParameter("url");
-//		String id = sc.getInitParameter("username");
-//		String pwd = sc.getInitParameter("password");
-		
 		try {
-			//mysql 제어 객체 로딩
-//			Class.forName(driver);
-//			conn = DriverManager.getConnection(url, id, pwd);
-			//servletcontext 데이터 보관소에 저장되어 있는 Connection 객체를 꺼내 씀
-			conn = (Connection)sc.getAttribute("conn");
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sqlSelect);
-			if(rs.next()) {
-				request.setAttribute("member", new Member()
-															.setNo(rs.getInt("mno"))
-															.setEmail(rs.getString("email"))
-															.setName(rs.getString("mname"))
-															.setCreateDate(rs.getDate("cre_date")));
-			} else {
-				throw new Exception("해당 번호의 회원을 찾을 수 없습니다.");
-			}
+			Connection conn = (Connection)sc.getAttribute("conn");
+			
+			MemberDAO memberDAO = new MemberDAO();
+			memberDAO.setConnection(conn);
+			
+			Member member = memberDAO.selectOne(Integer.parseInt(request.getParameter("no")));
+			
+			request.setAttribute("member", member);
 			
 			RequestDispatcher rd = request.getRequestDispatcher("/member/MemberUpdateForm.jsp");
 			rd.forward(request, response);
-//			response.setContentType("text/html;charset=UTF-8");
-//			PrintWriter out = response.getWriter();
-//			out.println("<html><head><title>회원정보</title></head>");
-//			out.println("<body><h1>회원정보</h1>");
-//			out.println("<form action='update' method='post'>");
-//			out.println("번호 : <input type='text' name='no' value='" + no + "' readonly> <br>");
-//			out.println("이름 : <input type='text' name='name' value='" + rs.getNString("mname") + "'> <br>");
-//			out.println("이메일 : <input type='text' name='email' value='" + rs.getNString("email") + "'> <br>");
-//			out.println("가입일 : " + rs.getDate("cre_date") + "<br>");
-//			out.println("<input type='submit' value='저장'>");
-//			out.println("<input type='button' value='취소' onclick='location.href=\"list\"'>");
-//			out.println("</form></body></html>");
 		} catch(Exception e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				if(rs != null) {
-					rs.close();
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-			
-			try {
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 
@@ -104,41 +57,30 @@ public class MemberUpdateServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		//request.setCharacterEncoding("UTF-8");
-		
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		String sqlUpdate = "UPDATE MEMBERS SET EMAIL=?, MNAME=?, MOD_DATE=NOW() WHERE MNO=?";
 		
 		//서블릿 컨텍스트 객체 생성
 		ServletContext sc = this.getServletContext();
 		
-		String driver = sc.getInitParameter("driver");
-		String url = sc.getInitParameter("url");
-		String id = sc.getInitParameter("username");
-		String pwd = sc.getInitParameter("password");
-		
 		try {
-			Class.forName(driver);
-			conn = DriverManager.getConnection(url, id, pwd);
-			stmt = conn.prepareStatement(sqlUpdate);
-			stmt.setString(1, request.getParameter("email"));
-			stmt.setString(2, request.getParameter("name"));
-			stmt.setInt(3, Integer.parseInt(request.getParameter("no")));
-			stmt.executeUpdate();
+			Connection conn = (Connection) sc.getAttribute("conn");
 			
-			response.sendRedirect("list");
+			MemberDAO memberDAO = new MemberDAO();
+			memberDAO.setConnection(conn);
+
+			//member객체 안에 있는 내용으로 업데이트 실행
+			int result = memberDAO.update(new Member()
+													  .setNo(Integer.parseInt(request.getParameter("no")))
+													  .setName(request.getParameter("name"))
+													  .setEmail(request.getParameter("email")));
+			
+			if(result == 1) {
+				response.sendRedirect("list");
+			} else { //실패했을 경우 Error페이지로
+				RequestDispatcher rd = request.getRequestDispatcher("Error.jsp");
+				rd.forward(request, response);
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
-		} finally {			
-			try {
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
-
 }

@@ -2,7 +2,6 @@ package spms.servlets;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Statement;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -12,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import spms.dao.MemberDAO;
+
 /**
  * Servlet implementation class MemberDeleteServlet
  */
@@ -20,36 +21,30 @@ public class MemberDeleteServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		Connection conn = null;
-		Statement stmt = null;
-		
-		String sqlDelete = "DELETE FROM MEMBERS WHERE MNO=" + request.getParameter("no");
-		
-		
+		// TODO Auto-generated method stub		
 		try {
 			ServletContext sc = this.getServletContext();
 			
-			conn = (Connection)sc.getAttribute("conn");
-			stmt = conn.createStatement();
+			Connection conn = (Connection)sc.getAttribute("conn");
 			
-			stmt.executeLargeUpdate(sqlDelete);
+			MemberDAO memberDAO = new MemberDAO();
+			memberDAO.setConnection(conn);
 			
-			response.sendRedirect("list");
+			int result = memberDAO.delete(Integer.parseInt(request.getParameter("no")));
+			
+			if(result == 1) {
+				response.sendRedirect("list");
+			} else {
+				RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
+				rd.forward(request, response);
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 			request.setAttribute("error", e);
-			RequestDispatcher rd = request.getRequestDispatcher("/error.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
 			rd.forward(request, response);
-		} finally {
-			try {
-				if(stmt != null) {
-					stmt.close();
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
 		}
 	}
 }

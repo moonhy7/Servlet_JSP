@@ -13,17 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class AppinitServlet
+ * Servlet implementation class AppInitServlet
  */
-
 //웹 애플리케이션을 이용해서 서버를 여는 것이므로 URL매핑을 따로 지정해줄 필요가 없음
 //@WebServlet("/AppInitServlet")
 public class AppInitServlet extends HttpServlet {
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-		System.out.println("AppInitServlet 준비...");
+		System.out.println("AppIninServlet 준비...");
 		super.init(config);
-		
+				
 		try {
 			ServletContext sc = this.getServletContext();
 			
@@ -43,12 +42,12 @@ public class AppInitServlet extends HttpServlet {
 	
 	@Override
 	public void destroy() {
-		System.out.println("AppInitServlet 마무리...");
+		System.out.println("AppInitServlet 마무리..");
 		super.destroy();
 		
 		//servletcontext 데이터 보관소에 저장되어 있는 mysql 접속 객체 꺼내옴
 		Connection conn = (Connection)this.getServletContext().getAttribute("conn");
-	
+		
 		try {
 			if(conn != null && conn.isClosed() == false) {
 				conn.close();
