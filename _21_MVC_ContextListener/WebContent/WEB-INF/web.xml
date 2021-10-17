@@ -20,13 +20,20 @@
   	<param-value>study</param-value>
   </context-param>
   
+  <!-- 리스너가 등록--> 
+  <!-- 웹애플리케이션 실행 -> contextInitialized() 호출 -->
+  <!-- 웹애플리케이션 종료 -> contextDesroyed() 호출 -->
+  <listener> 
+  	<listener-class>spms.listener.ContextLoaderListener</listener-class>
+  </listener>
+  
   <!-- AppInitServlet 선언 -->
-  <servlet>
+  <!--<servlet>
   	<servlet-name>AppInitServlet</servlet-name>
-  	<servlet-class>spms.servlets.AppInitServlet</servlet-class>
+  	<servlet-class>spms.servlets.AppInitServlet</servlet-class>-->
   	<!-- 클라이언트의 요청이 없어도 웹어플리케이션이 실행될 때 자동으로 서블릿이 생성되도록 함 -->
-  <load-on-startup>1</load-on-startup>
-  </servlet>
+  <!--<load-on-startup>1</load-on-startup>
+  </servlet>-->
   
   <!-- 필터 선언 -->
   <!-- <filter>

@@ -1,6 +1,7 @@
 package spms.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -56,5 +57,36 @@ public class MemberDAO {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	// MemberAddServlet에서 입력 폼으로 입력받은 데이터를 member객체로 담아서
+	//DAO로 전달할 예정
+	public int insert(Member member) throws Exception {
+		int result = 0;
+		PreparedStatement stmt = null;
+		final String sqlInsert = "INSERT INTO MEMBERS(EMAIL, PWD, MNAME, CRE_DATE, MOD_DATE)" + 
+									"VALUES(?, ?, ?, NOW(), NOW())";
+		
+		try {
+			stmt = connection.prepareStatement(sqlInsert);
+			stmt.setString(1, member.getEmail());
+			stmt.setString(2, member.getPassword());
+			stmt.setString(3, member.getName());
+			//insert 성공하면 1 int 값 리턴
+			//정상적으로 들어갔는지를 int 리턴 값을 가지고 서블릿에서 처리
+			stmt.executeUpdate();
+		} catch(Exception e) {
+			throw e;
+		} finally {
+			try {
+				if(stmt != null) {
+					stmt.close();
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return result;
 	}
 }

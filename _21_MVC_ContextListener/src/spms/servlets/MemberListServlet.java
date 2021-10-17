@@ -28,13 +28,11 @@ public class MemberListServlet extends GenericServlet {
 		
 		ServletContext sc = this.getServletContext();
 		
-		try {
-			Connection conn = (Connection)sc.getAttribute("conn");
-			
-			MemberDAO memberDAO = new MemberDAO();
-			//DAO객체 connection 주입
-			memberDAO.setConnection(conn);
-			
+		try {			
+			//ServletContext 데이터 보관소에 저장되어 있는 MemberDAO객체 꺼내옴
+			//DB 커넥션 주입까지 완료된 상태의 MemberDAO
+			MemberDAO memberDAO = (MemberDAO)sc.getAttribute("memberDAO");
+
 			//request에 회원 목록 데이터 보관
 			request.setAttribute("memberList", memberDAO.selectlist());
 			
