@@ -27,6 +27,7 @@ public class MemberDeleteServlet extends HttpServlet {
 		
 		String sqlDelete = "DELETE FROM MEMBERS WHERE MNO=" + request.getParameter("no");
 		
+		
 		try {
 			ServletContext sc = this.getServletContext();
 			
