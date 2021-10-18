@@ -21,6 +21,25 @@
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
     <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>
 
+	<!-- 톰캣 데이터 소스 설정
+	name : JNDI 이름. Context의 lookup() 메소드 사용하여 자원을 찾을 때 사용
+	auth : 데이터 소스 관리 주체 (Container|Application)
+	type : 자원의 타입 설정
+	MaxActive : 최대 커넥션 개수 설정
+	maxIdle : 최대 유지 가능한 사용하지 않는 커넥션 개수. 설정한 개수보다 많은 커넥션이 반환되면 반환되는 커넥션은 종료
+	maxWait : 연결 가능한 커넥션이 최대값에 도달했을 때 기다리는 시간(밀리초). 기다리는 시간동안 반환되는 커넥션이 없으면 예외를 던짐
+	close : 톰캣 서버 종료 시 자원 해제를 위해 호출할 메소드 설정 -->
+	
+	<Resource name="jdbc/studydb" auth="Container" type="javax.sql.DataSource"
+			  maxActive="10"
+			  MaxIdle="3"
+			  maxWait="10000"
+			  username="study"
+			  password="study"
+			  driverClassName="com.mysql.cj.jdbc.Driver"
+			  url="jdbc:mysql://localhost/studydb"
+			  closeMethod="close"></Resource>
+
     <!-- Uncomment this to disable session persistence across Tomcat restarts -->
     <!--
     <Manager pathname="" />

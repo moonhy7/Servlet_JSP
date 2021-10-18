@@ -1,6 +1,5 @@
 package spms.listener;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 
 import javax.servlet.ServletContext;
@@ -31,8 +30,9 @@ public class ContextLoaderListener implements ServletContextListener {
 											sc.getInitParameter("url"),
 											sc.getInitParameter("username"),
 											sc.getInitParameter("password"));
+			
 			MemberDAO memberDAO = new MemberDAO();
-			memberDAO.setDBConnectionPool(connPool); 
+			memberDAO.setDBConnectionPool(connPool);
 			
 			//생성된 MemberDAO객체를 ServletContext 데이터 보관소를 통해 서블릿끼리 공유
 			sc.setAttribute("memberDAO", memberDAO);
@@ -44,11 +44,8 @@ public class ContextLoaderListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		try {
-			//웹 어플리케이션이 종료될 때 DB커넥션이 살아있으면 끊어줌
-			if(conn != null) {
-				conn.close();
-			}
 			System.out.println("contextDestroyed");
+			connPool.closeAll();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
