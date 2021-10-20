@@ -176,6 +176,8 @@ public class MemberDAO {
 	}
 	//exist메소드를 통해 해당 멤버가 있는지 확인
 	public Member exist(String email, String password) throws Exception {
+		System.out.println(email);
+		System.out.println(password);
 		Member member = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
